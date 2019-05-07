@@ -63,7 +63,7 @@ public class LiveChanges extends ConfigTestElement implements TestBean, LoopIter
         try {
             this.finalizeTest();
         } catch (Exception e) {
-            logger.error("LiveChanges API was unable to gracefully shutdown. More info into JMeter's console.");
+            logger.error("LiveChanges API was unable to gracefully shutdown. More info in JMeter's console.");
         }
     }
 
@@ -76,12 +76,13 @@ public class LiveChanges extends ConfigTestElement implements TestBean, LoopIter
         try {
             this.finalizeTest();
         } catch (Exception e) {
-            logger.error("LiveChanges API was unable to gracefully shutdown. More info into JMeter's console.");
+            logger.error("LiveChanges API was unable to gracefully shutdown. More info in JMeter's console.");
         }
     }
 
     /**
      * Method that is executed upon every thread iteration of the JMeter script
+     * This plugin works specifically because of this method that acts as an non-blocking event loop
      * @param event LoopIterationEvent
      */
     @Override
@@ -180,7 +181,7 @@ public class LiveChanges extends ConfigTestElement implements TestBean, LoopIter
             this.app = new App(this.httpServerPort);
             this.app.start();
         } catch (IOException e) {
-            logger.error("An error occured when loading the test plan tree. View JMeter's console for more information.");
+            logger.error("LiveChanges was unable to load the test plan tree. More info in JMeter's console.");
             e.printStackTrace();
         }
     }
@@ -193,7 +194,7 @@ public class LiveChanges extends ConfigTestElement implements TestBean, LoopIter
             this.app.stop();
             logger.info("LiveChanges API was successfully stopped.");
         } catch (Exception e) {
-            logger.error("Unable to correctly shutdown Jetty server", e);
+            logger.error("LiveChanges was unable to correctly shutdown Jetty server. More info in JMeter's console", e);
         }
     }
 

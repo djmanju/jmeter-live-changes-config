@@ -7,9 +7,8 @@ import org.apache.jorphan.collections.HashTree;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Class that contains static methods to manipulate Thread Groups and retrieve information
@@ -19,8 +18,8 @@ public class ThreadGroupHelper {
      * Static method that retrieves Thread Groups from the test tree
      * @return Set of ThreadGroup objects
      */
-    private static Set<ThreadGroup> getThreadGroups() {
-        HashSet<ThreadGroup> threadGroups = new HashSet<>();
+    private static HashMap<String, ThreadGroup> getThreadGroups() {
+        HashMap<String, ThreadGroup> threadGroups = new HashMap<>();
         HashTree testPlanTree = LiveChanges.getTestPlanTree();
         for (Map.Entry entry : testPlanTree.entrySet()) {
             if (entry.getKey() instanceof TestPlan) {
@@ -28,7 +27,8 @@ public class ThreadGroupHelper {
 
                 for (Map.Entry element : testPlan.entrySet()) {
                     if(element.getKey() instanceof ThreadGroup) {
-                        threadGroups.add((ThreadGroup) element.getKey());
+                        ThreadGroup threadGroup = (ThreadGroup) element.getKey();
+                        threadGroups.put(threadGroup.getName(), threadGroup);
                     }
                 }
             }
@@ -42,10 +42,9 @@ public class ThreadGroupHelper {
      * @return A single ThreadGroup object
      */
     public static ThreadGroup getThreadGroup(String threadGroupName) {
-        for(ThreadGroup threadGroup : getThreadGroups()) {
-            if(threadGroup.getName().equalsIgnoreCase(threadGroupName)) {
-                return threadGroup;
-            }
+        HashMap<String, ThreadGroup> threadGroups = getThreadGroups();
+        if(threadGroups.containsKey(threadGroupName)) {
+            return threadGroups.get(threadGroupName);
         }
         return null;
     }
@@ -66,7 +65,8 @@ public class ThreadGroupHelper {
      */
     public static JSONArray getAllThreadGroupsAsJSON() {
         JSONArray jsonArray = new JSONArray();
-        for(ThreadGroup threadGroup : getThreadGroups()) {
+        for(Map.Entry entry : getThreadGroups().entrySet()) {
+            ThreadGroup threadGroup = (ThreadGroup) entry.getValue();
             jsonArray.put(createThreadGroupObject(threadGroup));
         }
 

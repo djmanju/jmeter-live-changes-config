@@ -47,7 +47,7 @@ public class ResultHolder {
         long totalSquaredDiff = 0;
         HashSet<Long> squaredDiff = new HashSet<>();
 
-        // substract, square and add to a temporary set
+        // subtract, square and add to a temporary set
         this.responseTimeSet.forEach(number -> {
             number = (number - this.avgResponseTime)^2;
             squaredDiff.add(number);
