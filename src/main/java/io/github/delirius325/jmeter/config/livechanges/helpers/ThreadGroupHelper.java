@@ -27,8 +27,7 @@ public class ThreadGroupHelper {
 
                 for (Map.Entry element : testPlan.entrySet()) {
                     if(element.getKey() instanceof ThreadGroup) {
-                        ThreadGroup threadGroup = (ThreadGroup) element.getKey();
-                        threadGroups.put(threadGroup.getName(), threadGroup);
+                        threadGroups.put(((ThreadGroup) element.getKey()).getName(), (ThreadGroup) element.getKey());
                     }
                 }
             }
@@ -66,8 +65,7 @@ public class ThreadGroupHelper {
     public static JSONArray getAllThreadGroupsAsJSON() {
         JSONArray jsonArray = new JSONArray();
         for(Map.Entry entry : getThreadGroups().entrySet()) {
-            ThreadGroup threadGroup = (ThreadGroup) entry.getValue();
-            jsonArray.put(createThreadGroupObject(threadGroup));
+            jsonArray.put(createThreadGroupObject((ThreadGroup) entry.getValue()));
         }
 
         return jsonArray;
